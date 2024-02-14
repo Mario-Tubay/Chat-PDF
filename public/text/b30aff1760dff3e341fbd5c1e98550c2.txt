@@ -1,0 +1,165 @@
+ELOQUENT
+JAVASCRIPT
+THIRD EDITION
+A Modern Introduction
+to Programming
+Marijn Haverbeke
+no starch
+press
+ELOQUENT JAVASCRIPT
+3RA EDICIÓN
+Marijn Haverbeke
+Copyright © 2018 por Marijn Haverbeke
+Este libro está bajo la licencia Creative Commons Atribución-NoComercial
+3.0 (http://creativecommons.org/licenses/by-nc/3.0/). El código también
+puede considerarse bajo una licencia MIT (http://opensource.org/licenses/
+MIT).
+Las ilustraciones han sido contribuidas por varios artistas: Cover and chap-
+ter illustrations by Madalina Tantareanu. Pixel art in Chapters 7 and 16 by
+Antonio Perdomo Pastor. Regular expression diagrams in Chapter 9 gener-
+ated with regexper.com by Jeff vallone. Village photograph in Chapter by
+Fabrice Creuzot. Game concept for Chapter 15 by Thomas Palef.
+The third edition of Eloquent JavaScript was made possible by 325 financial
+backers.
+You can buy a print version of this book, with an extra bonus chapter included,
+printed by No Starch Press at http://a-fwd.com/com-marijhaver-20&asin-
+com=1593279507.
+i
+// Esto esta bien
+puntuacion.visitantes = 1;
+// Esto no esta permitido
+puntuacion = {visitantes: 1, locales: 1};
+Cuando comparas objetos con el operador == en JavaScript, este los com-
+para por identidad: producirá true solo si ambos objetos son precisamente el
+mismo valor. Comparar diferentes objetos retornara false, incluso si tienen
+propiedades idénticas. No hay una operación de comparación "profunda" in-
+corporada en JavaScript, que compare objetos por contenidos, pero es posible
+que la escribas tu mismo (que es uno de los ejercicios al final de este capítulo).
+EL DIARIO DEL LICÁNTROPO
+Asi que Jacques inicia su intérprete de JavaScript y establece el entorno que
+necesita para mantener su diario.
+let diario = [];
+function añadirEntrada (eventos, ardilla) {
+diario.push({eventos, ardilla});
+}
+Ten en cuenta que el objeto agregado al diario se ve un poco extraño. En
+lugar de declarar propiedades como eventos: eventos, simplemente da un nom-
+bre de propiedad. Este es un atajo que representa lo mismo si el nombre de
+propiedad en la notación de llaves no es seguido por un valor, su el valor se
+toma de la vinculación con el mismo nombre.
+Entonces, todas las noches a las diez o algunas veces a la mañana siguiente,
+después de bajar del estante superior de su biblioteca-Jacques registra el día.
+So then, every evening at tenor sometimes the next morning, after climbing
+down from the top shelf of his bookcase Jacques records the day.
+añadirEntrada (["trabajo", "toque un arbol", "pizza", "sali a correr
+"television"], false);
+añadirEntrada (["trabajo", "helado", "coliflor", "lasaña",
+"toque un arbol", "me cepille los dientes"], false);
+añadirEntrada (["fin de semana", "monte la bicicleta", "descanso",
+nueces"
+"cerveza"], true);
+68
+(ardilla) es falso (0) y la segunda variable (pizza) es verdadera (1). En la tabla
+de pizza, noi es 9.
+El valor n₁. se refiere a la suma de todas las medidas donde la primera
+variable es verdadera, que es 5 en la tabla de ejemplo. Del mismo modo, n.o
+se refiere a la suma de las mediciones donde la segunda variable es falsa.
+Entonces para la tabla de pizza, la parte arriba de la línea de división (el
+dividendo) sería 1×76-4x9 = 40, y la parte inferior (el divisor) sería la raíz
+cuadrada de 5x85×10×80, o √340000. Esto da y≈ 0.069, que es muy pequeño.
+Comer pizza no parece tener influencia en las transformaciones.
+CALCULANDO CORRELACIÓN
+Podemos representar una tabla de dos-por-dos en JavaScript con un array de
+cuatro elementos ([76, 9, 4, 1]). También podríamos usar otras representa-
+ciones, como un array que contiene dos arrays de dos elementos ([[76, 9],
+[4, 1]]) o un objeto con nombres de propiedad como "11" y "01", pero el
+array plano es simple y hace que las expresiones que acceden a la tabla agrad-
+ablemente cortas. Interpretaremos los índices del array como número binarios
+de dos-bits, donde el dígito más a la izquierda (más significativo) se refiere a la
+variable ardilla y el digito mas a la derecha (menos significativo) se refiere a la
+variable de evento. Por ejemplo, el número binario 10 se refiere al caso en que
+Jacques se convirtió en una ardilla, pero el evento (por ejemplo, “pizza”) no
+ocurrió. Esto ocurrió cuatro veces. Y dado que el 10 binario es 2 en notación
+decimal, almacenaremos este número en el índice 2 del array.
+Esta es la función que calcula el coeficiente
+de tal array:
+4
+function phi (tabla) {
+return (tabla[3] * tabla[0] tabla [2] * tabla[1]) /
+Math.sqrt((tabla[2] + tabla[3]) *
+(tabla [0] + tabla[1]) *
+(tabla[1] + tabla[3]) *
+(tabla [0] + tabla[2]));
+console.log (phi ([76, 9, 4, 1]));
+// 0.068599434
+Esta es una traducción directa de la fórmula y a JavaScript. Math.sqrt es
+la función de raíz cuadrada, proporcionada por el objeto Math en un entorno
+de JavaScript estándar. Tenemos que sumar dos campos de la tabla para
+70
+obtener campos como n₁. porque las sumas de filas o columnas no se almacenan
+directamente en nuestra estructura de datos.
+Jacques mantuvo su diario por tres meses. El conjunto de datos resultante
+está disponible en la caja de arena para este capítulo(eloquentjavascript.net/
+code #4), donde se almacena en la vinculación JOURNAL, y en un archivo descar-
+gable.
+Para extraer una tabla de dos por dos para un evento en específico del diario,
+debemos hacer un ciclo a traves de todas las entradas y contar cuántas veces
+ocurre el evento en relación a las transformaciones de ardilla.
+function tablaPara (evento, diario) {
+let tabla = [0, 0, 0, 0];
+for (let i = 0; i < diario.length; i++) {
+let entrada = diario[i], index = 0;
+if (entrada.eventos.includes (evento)) index += 1;
+if (entrada.ardilla) index += 2;
+tabla[index] += 1;
+return tabla;
+console.log(tablaPara("pizza", JOURNAL));
+//→ [76, 9, 4, 1]
+Los array tienen un método includes ("incluye") que verifica si un valor
+dado existe en el array. La función usa eso para determinar si el nombre del
+evento en el que estamos interesados forma parte de la lista de eventos para un
+determinado día.
+El cuerpo del ciclo en tablaPara determina en cual caja de la tabla cae cada
+entrada del diario al verificar si la entrada contiene el evento específico que nos
+interesa y si el evento ocurre junto con un incidente de ardilla. El ciclo luego
+agrega uno a la caja correcta en la tabla.
+Ahora tenemos las herramientas que necesitamos para calcular las correlaciónes
+individuales. El único paso que queda es encontrar una correlación para cada
+tipo de evento que se escribio en el diario y ver si algo se destaca.
+CICLOS DE ARRAY
+En la función tablaPara, hay un ciclo como este:
+for (let i = 0; i < DIARIO.length; i++) {
+71
+let entrada = DIARIO[i];
+// Hacer con algo con la entrada
+}
+Este tipo de ciclo es común en JavaScript clasico-ir a traves de los arrays
+un elemento a la vez es algo que surge mucho, y para hacer eso correrias un
+contador sobre la longitud del array y elegirías cada elemento en turnos.
+Hay una forma más simple de escribir tales ciclos en JavaScript moderno.
+for (let entrada DIARIO) {
+console.log('${entrada.eventos.length} eventos.');
+}
+Cuando un ciclo for se vea de esta manera, con la palabra of ("de”) después
+de una definición de variable, recorrerá los elementos del valor dado después of.
+Esto funciona no solo para arrays, sino también para strings y algunas otras
+estructuras de datos. Vamos a discutir como funciona en el Capítulo 6.
+EL ANÁLISIS FINAL
+Necesitamos calcular una correlación para cada tipo de evento que ocurra en el
+conjunto de datos. Para hacer eso, primero tenemos que encontrar cada tipo
+de evento.
+function eventosDiario (diario) {
+let eventos = [];
+for (let entrada of diario) {
+for (let evento of entrada.eventos) {
+if (!eventos.includes (evento)) {
+eventos.push(evento);
+}
+//
+}
+return eventos;
+console.log(eventosDiario (DIARIO));
+["zanahoria", "ejercicio", "fin de semana". "pan", ...]
+Yendo a traves de todos los eventos, y agregando aquellos que aún no están
+en allí en el array eventos, la función recolecta cada tipo de evento.
+72
